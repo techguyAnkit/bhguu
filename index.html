@@ -94,14 +94,29 @@ body {
 }
 
 /* Story */
+/* Story */
 .story-line {
   opacity: 0.3;
-  transition: 0.5s;
+  transition: all 0.5s ease;
+  padding: 8px 12px;
+  border-radius: 12px;
+  display: block;
+  margin: 6px 0;
+
+  /* optional cinematic blur */
+  filter: blur(1px);
 }
+
+/* Active line */
 .story-line.active {
   opacity: 1;
   color: #ff4d6d;
   transform: scale(1.05);
+
+  background: rgba(255, 77, 109, 0.15);
+  box-shadow: 0 0 12px rgba(255, 77, 109, 0.25);
+
+  filter: blur(0);
 }
 
 /* Button */
@@ -313,25 +328,31 @@ setInterval(()=>{
 },1000);
 
 /* Slideshow */
-const images=["img1.jpeg","img2.jpeg","img3.jpeg","img4.jpeg","img5.jpeg","img6.jpeg","img7.jpeg","img8.jpeg","img9.jpeg","img10.jpeg"];
-const lines=document.querySelectorAll(".story-line");
+const images = ["img1.jpeg","img2.jpeg","img3.jpeg","img4.jpeg","img5.jpeg","img6.jpeg","img7.jpeg","img8.jpeg","img9.jpeg","img10.jpeg"];
+const lines = document.querySelectorAll(".story-line");
 
-let i=0;
-const slide=document.getElementById("slide");
+let imgIndex = 0;
+let lineIndex = 0;
 
+const slide = document.getElementById("slide");
+
+// first line active
 lines[0].classList.add("active");
 
 setInterval(()=>{
-  slide.style.opacity=0;
+  // IMAGE LOOP
+  slide.style.opacity = 0;
   setTimeout(()=>{
-    i=(i+1)%images.length;
-    slide.src=images[i];
-
-    lines.forEach(l=>l.classList.remove("active"));
-    if(lines[i]) lines[i].classList.add("active");
-
-    slide.style.opacity=1;
+    imgIndex = (imgIndex + 1) % images.length;
+    slide.src = images[imgIndex];
+    slide.style.opacity = 1;
   },300);
+
+  // STORY LOOP
+  lines.forEach(l => l.classList.remove("active"));
+
+  lineIndex = (lineIndex + 1) % lines.length;
+  lines[lineIndex].classList.add("active");
 
 },3000);
 
