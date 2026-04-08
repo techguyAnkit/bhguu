@@ -75,25 +75,55 @@ body {
 
 .hidden { display: none; }
 
-/* Theatre */
-.theatre {
-  width: 100%;
-  max-width: 320px;
-  aspect-ratio: 3/4;
-  margin: auto;
-  border-radius: 20px;
-  overflow: hidden;
-  background: black;
+/* ❌ REMOVED THEATRE */
+
+/* ✅ NEW PC UI */
+.pc-frame { 
+  margin-top: 12px; 
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
-.theatre img {
+.pc-frame::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  width: 60px;
+  height: 5px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+}
+
+.pc-screen {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  height: 200px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 4px solid rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 
+    0 25px 60px rgba(0,0,0,0.55),
+    inset 0 0 25px rgba(255,255,255,0.12);
+}
+
+.pc-screen img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: opacity 0.6s ease;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
 }
 
-/* Story */
+.pc-screen img.active { 
+  opacity: 1; 
+}
+
 /* Story */
 .story-line {
   opacity: 0.3;
@@ -102,20 +132,15 @@ body {
   border-radius: 12px;
   display: block;
   margin: 6px 0;
-
-  /* optional cinematic blur */
   filter: blur(1px);
 }
 
-/* Active line */
 .story-line.active {
   opacity: 1;
   color: #ff4d6d;
   transform: scale(1.05);
-
   background: rgba(255, 77, 109, 0.15);
   box-shadow: 0 0 12px rgba(255, 77, 109, 0.25);
-
   filter: blur(0);
 }
 
@@ -160,7 +185,7 @@ button {
   to { transform: translateY(100vh); }
 }
 
-/* Floating messages */
+/* Messages */
 .msg {
   position: fixed;
   bottom: 20px;
@@ -182,26 +207,22 @@ button {
 
 <body>
 
-<!-- Background -->
 <video autoplay muted loop id="bgVideo">
   <source src="bg.mp4" type="video/mp4">
 </video>
 
-<!-- Music -->
 <audio id="music" loop>
   <source src="song1.mp3" type="audio/mp3">
 </audio>
 
 <button class="music-btn" onclick="toggleMusic()">🎶</button>
 
-<!-- ENTRY -->
 <div id="entry" class="center-screen">
   <h1 class="main-title">Hey Bhagyashree 🌷</h1>
   <p>If you’re here… you zoned out again, right?</p>
   <button onclick="enterSite()">Come back slowly</button>
 </div>
 
-<!-- MAIN -->
 <div id="main" class="container hidden fade-main">
 
 <div class="card">
@@ -209,7 +230,7 @@ button {
   <p id="time"></p>
 </div>
 
-<!-- STORY -->
+<!-- STORY (UNCHANGED FULL) -->
 <div class="card">
   <h2>Our Story ✨</h2>
 
@@ -246,19 +267,28 @@ button {
   <p class="story-line">Energy low feel hota , aur jb aache se baat ho relaxed feel hota</p>
   <p class="story-line">Aur ab mere karn tujhe sb suar bolrhe h hehehe</p>
   <p class="story-line">htt *10000 ab nikl , ye site tere liye nhu h , huu :) bhguu</p>
-  
-
 </div>
 
-<!-- THEATRE -->
+<!-- ✅ REPLACED UI ONLY -->
 <div class="card">
   <h2>Us 🎬</h2>
-  <div class="theatre">
-    <img id="slide" src="img1.jpeg">
+  <div class="pc-frame">
+    <div class="pc-screen">
+      <img class="active" src="img1.jpeg">
+      <img src="img2.jpeg">
+      <img src="img3.jpeg">
+      <img src="img4.jpeg">
+      <img src="img5.jpeg">
+      <img src="img6.jpeg">
+      <img src="img7.jpeg">
+      <img src="img8.jpeg">
+      <img src="img9.jpeg">
+      <img src="img10.jpeg">
+    </div>
   </div>
 </div>
 
-<!-- VOICE -->
+<!-- REST UNCHANGED -->
 <div class="card">
   <h2>Listen 🎧</h2>
   <audio id="voice" controls style="width:100%">
@@ -327,28 +357,28 @@ setInterval(()=>{
   "Time: "+new Date().toLocaleTimeString();
 },1000);
 
-/* Slideshow */
+/* ORIGINAL VARIABLES KEPT */
 const images = ["img1.jpeg","img2.jpeg","img3.jpeg","img4.jpeg","img5.jpeg","img6.jpeg","img7.jpeg","img8.jpeg","img9.jpeg","img10.jpeg"];
 const lines = document.querySelectorAll(".story-line");
 
 let imgIndex = 0;
 let lineIndex = 0;
 
-const slide = document.getElementById("slide");
+/* NEW SLIDES */
+const slides = document.querySelectorAll(".pc-screen img");
+let current = 0;
 
 // first line active
 lines[0].classList.add("active");
 
 setInterval(()=>{
-  // IMAGE LOOP
-  slide.style.opacity = 0;
-  setTimeout(()=>{
-    imgIndex = (imgIndex + 1) % images.length;
-    slide.src = images[imgIndex];
-    slide.style.opacity = 1;
-  },300);
 
-  // STORY LOOP
+  /* NEW IMAGE LOGIC */
+  slides[current].classList.remove("active");
+  current = (current + 1) % slides.length;
+  slides[current].classList.add("active");
+
+  /* STORY LOOP (UNCHANGED) */
   lines.forEach(l => l.classList.remove("active"));
 
   lineIndex = (lineIndex + 1) % lines.length;
